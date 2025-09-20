@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Makan Dulu Aja 🍔</title>
+  <style>
+    * {margin:0;padding:0;box-sizing:border-box;font-family:"Poppins",sans-serif;}
+    body {
+      background: linear-gradient(135deg, #ff7e5f, #feb47b);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+    }
+    .container {
+      width: 100%;
+      max-width: 450px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      padding: 30px;
+      animation: fadeIn 1s ease-in-out;
+    }
+    h1 {
+      text-align: center;
+      font-size: 26px;
+      background: linear-gradient(90deg,#ff7e5f,#feb47b);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      margin-bottom: 15px;
+    }
+    .logo {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    .logo img {
+      width: 80px;
+      animation: bounce 2s infinite;
+    }
+    .hidden { display: none; }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #eee;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      font-size: 16px;
+      transition: 0.2s;
+    }
+    input:focus, select:focus {
+      border-color: #ff7e5f;
+      outline: none;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(90deg,#ff7e5f,#feb47b);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+      transition: transform 0.2s;
+    }
+    button:hover { transform: translateY(-3px); }
+    button:active { transform: translateY(-1px); }
+
+    .menu-item {
+      background: #f9fafb;
+      border: 2px solid #eee;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: 0.2s;
+    }
+    .menu-item:hover { border-color: #ff7e5f; }
+
+    .menu-item span {
+      font-weight: 600;
+    }
+    .menu-item select {
+      width: 90px;
+    }
+
+    @keyframes fadeIn {
+      from {opacity:0;transform:translateY(20px);}
+      to {opacity:1;transform:translateY(0);}
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="welcomeScreen">
+    <div class="logo"><img src="https://img.icons8.com/emoji/96/hamburger-emoji.png" alt="logo"></div>
+    <h1>Selamat Datang di <br> Makan Dulu Aja</h1>
+    <p style="text-align:center;margin-bottom:20px;color:#444;">Isi data dulu sebelum pesan ya 🍽️</p>
+    <input type="text" id="nama" placeholder="Nama kamu" required>
+    <input type="tel" id="hp" placeholder="Nomor HP aktif" required>
+    <button onclick="startOrder()">Mulai Pesan</button>
+  </div>
+
+  <div class="container hidden" id="orderScreen">
+    <h1>Menu Makanan</h1>
+    <div class="menu-item">
+      <span>🍔 Burger Spesial</span>
+      <select id="burger">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+      </select>
+    </div>
+    <div class="menu-item">
+      <span>🍕 Pizza Mini</span>
+      <select id="pizza">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+      </select>
+    </div>
+    <div class="menu-item">
+      <span>🥤 Es Teh Manis</span>
+      <select id="esteh">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+      </select>
+    </div>
+    <input type="text" id="alamat" placeholder="Alamat pengiriman" required>
+    <button onclick="sendOrder()">Beli Sekarang</button>
+  </div>
+
+  <script>
+    let userName = "";
+    let userHP = "";
+
+    function startOrder() {
+      userName = document.getElementById("nama").value;
+      userHP = document.getElementById("hp").value;
+      if (!userName || !userHP) {
+        alert("Isi nama dan nomor HP dulu ya!");
+        return;
+      }
+      document.getElementById("welcomeScreen").classList.add("hidden");
+      document.getElementById("orderScreen").classList.remove("hidden");
+    }
+
+    function sendOrder() {
+      const burger = document.getElementById("burger").value;
+      const pizza = document.getElementById("pizza").value;
+      const esteh = document.getElementById("esteh").value;
+      const alamat = document.getElementById("alamat").value;
+
+      if (!alamat) {
+        alert("Alamat tidak boleh kosong!");
+        return;
+      }
+
+      // Format pesan
+      let pesan = `🍽️ *Pesanan Baru - Makan Dulu Aja* 🍽️
+Nama: ${userName}
+No HP: ${userHP}
+Alamat: ${alamat}
+
+Pesanan:
+🍔 Burger Spesial: ${burger}
+🍕 Pizza Mini: ${pizza}
+🥤 Es Teh Manis: ${esteh}
+
+👉 Tolong segera diproses ya 🙏`;
+
+      // Nomor WA admin (ganti dengan nomor kamu)
+      const phoneNumber = "6289507083879"; 
+      const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(pesan)}`;
+      window.open(url, "_blank");
+    }
+  </script>
+</body>
+</html>
