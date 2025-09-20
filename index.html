@@ -3,41 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Makan Dulu Aja 🍔</title>
+  <title>Makan Dulu Aja 🍚</title>
   <style>
     * {margin:0;padding:0;box-sizing:border-box;font-family:"Poppins",sans-serif;}
     body {
-      background: linear-gradient(135deg, #ff7e5f, #feb47b);
+      background: linear-gradient(135deg, #ff512f, #dd2476);
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow-x: hidden;
+      padding: 20px;
+      color: #333;
     }
     .container {
       width: 100%;
-      max-width: 450px;
+      max-width: 480px;
       background: #fff;
       border-radius: 18px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-      padding: 30px;
-      animation: fadeIn 1s ease-in-out;
+      padding: 25px;
+      animation: fadeIn 0.8s ease-in-out;
     }
     h1 {
       text-align: center;
       font-size: 26px;
-      background: linear-gradient(90deg,#ff7e5f,#feb47b);
+      background: linear-gradient(90deg,#ff512f,#dd2476);
       -webkit-background-clip:text;
       -webkit-text-fill-color:transparent;
       margin-bottom: 15px;
     }
     .logo {
       text-align: center;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
     .logo img {
-      width: 80px;
-      animation: bounce 2s infinite;
+      width: 140px;
+      height: auto;
+      display: inline-block;
+      animation: pulse 3s infinite ease-in-out;
     }
     .hidden { display: none; }
 
@@ -51,7 +54,7 @@
       transition: 0.2s;
     }
     input:focus, select:focus {
-      border-color: #ff7e5f;
+      border-color: #ff512f;
       outline: none;
     }
     button {
@@ -60,7 +63,7 @@
       font-size: 16px;
       border: none;
       border-radius: 12px;
-      background: linear-gradient(90deg,#ff7e5f,#feb47b);
+      background: linear-gradient(90deg,#ff512f,#dd2476);
       color: #fff;
       font-weight: 600;
       cursor: pointer;
@@ -81,28 +84,57 @@
       align-items: center;
       transition: 0.2s;
     }
-    .menu-item:hover { border-color: #ff7e5f; }
+    .menu-item:hover { border-color: #ff512f; }
+    .menu-item span { font-weight: 600; }
+    .menu-item select { width: 90px; }
 
-    .menu-item span {
-      font-weight: 600;
+    .slideshow {
+      margin: 15px 0;
+      text-align: center;
     }
-    .menu-item select {
-      width: 90px;
+    .slideshow img {
+      width: 100%;
+      max-height: 180px;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #16a34a;
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 8px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: 0.3s;
+      z-index: 999;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     @keyframes fadeIn {
       from {opacity:0;transform:translateY(20px);}
       to {opacity:1;transform:translateY(0);}
     }
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
     }
   </style>
 </head>
 <body>
+  <!-- Welcome Screen -->
   <div class="container" id="welcomeScreen">
-    <div class="logo"><img src="https://img.icons8.com/emoji/96/hamburger-emoji.png" alt="logo"></div>
+    <div class="logo">
+      <img src="https://scontent-cgk2-2.xx.fbcdn.net/v/t39.30808-6/510955488_1446943492980355_955974879271805861_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFvPljbdOtIIkfXXFyw6dbsnQiIsBwsaLmdCIiwHCxouemas9Q5pU0ZbzZIPlMzXRFJdBcl72W65GouMi-jE5EU&_nc_ohc=vythnD6JtdEQ7kNvwH7lN6n&_nc_oc=AdnURQeYZyBh32gKnbf3hGHOOM_RIFbns21TJSTlNwilxwVh4UuYI-apmD33I-e7dxxSEPgO5kQ7HdkAGZ5ZEJKN&_nc_zt=23&_nc_ht=scontent-cgk2-2.xx&_nc_gid=xSvqVohh8zqHp94MmXHs_A&oh=00_AfbQ62ju6V-DafNj5IJWquXocClRMJxeRh0WkeAlP_JvuQ&oe=68D49C49" alt="Logo Brand">
+    </div>
     <h1>Selamat Datang di <br> Makan Dulu Aja</h1>
     <p style="text-align:center;margin-bottom:20px;color:#444;">Isi data dulu sebelum pesan ya 🍽️</p>
     <input type="text" id="nama" placeholder="Nama kamu" required>
@@ -110,39 +142,66 @@
     <button onclick="startOrder()">Mulai Pesan</button>
   </div>
 
+  <!-- Order Screen -->
   <div class="container hidden" id="orderScreen">
     <h1>Menu Makanan</h1>
+
+    <!-- Slideshow -->
+    <div class="slideshow">
+      <img id="slideImg" src="https://img.freepik.com/free-photo/indonesian-nasi-goreng-fried-rice_1203-3421.jpg" alt="Slideshow">
+    </div>
+
     <div class="menu-item">
-      <span>🍔 Burger Spesial</span>
-      <select id="burger">
-        <option value="0">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-      </select>
+      <span>🍚 Nasi Goreng Rumahan</span>
+      <select id="nasigoreng"></select>
     </div>
     <div class="menu-item">
-      <span>🍕 Pizza Mini</span>
-      <select id="pizza">
-        <option value="0">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-      </select>
+      <span>🍚 Nasi Goreng Ati Ampla Rumahan</span>
+      <select id="nasigorengati"></select>
     </div>
     <div class="menu-item">
-      <span>🥤 Es Teh Manis</span>
-      <select id="esteh">
-        <option value="0">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-      </select>
+      <span>🍜 Mie Nyemek Rumahan</span>
+      <select id="mienyemek"></select>
     </div>
+    <div class="menu-item">
+      <span>🍜 Mie Goreng Rumahan</span>
+      <select id="miegoreng"></select>
+    </div>
+    <div class="menu-item">
+      <span>🥤 Teh Botol</span>
+      <select id="tehbotol"></select>
+    </div>
+
     <input type="text" id="alamat" placeholder="Alamat pengiriman" required>
     <button onclick="sendOrder()">Beli Sekarang</button>
   </div>
 
+  <!-- Toast -->
+  <div class="toast" id="toast">✅ Pesanan terkirim ke WhatsApp!</div>
+
   <script>
     let userName = "";
     let userHP = "";
+
+    const priceList = {
+      nasigoreng: 20000,
+      nasigorengati: 25000,
+      mienyemek: 22000,
+      miegoreng: 21000,
+      tehbotol: 7000
+    };
+
+    // generate opsi 0–20 pcs
+    function generateOptions(selectId) {
+      let select = document.getElementById(selectId);
+      for (let i = 0; i <= 20; i++) {
+        let option = document.createElement("option");
+        option.value = i;
+        option.textContent = i;
+        select.appendChild(option);
+      }
+    }
+    ["nasigoreng", "nasigorengati", "mienyemek", "miegoreng", "tehbotol"].forEach(generateOptions);
 
     function startOrder() {
       userName = document.getElementById("nama").value;
@@ -156,9 +215,11 @@
     }
 
     function sendOrder() {
-      const burger = document.getElementById("burger").value;
-      const pizza = document.getElementById("pizza").value;
-      const esteh = document.getElementById("esteh").value;
+      const nasigoreng = document.getElementById("nasigoreng").value;
+      const nasigorengati = document.getElementById("nasigorengati").value;
+      const mienyemek = document.getElementById("mienyemek").value;
+      const miegoreng = document.getElementById("miegoreng").value;
+      const tehbotol = document.getElementById("tehbotol").value;
       const alamat = document.getElementById("alamat").value;
 
       if (!alamat) {
@@ -166,24 +227,67 @@
         return;
       }
 
-      // Format pesan
-      let pesan = `🍽️ *Pesanan Baru - Makan Dulu Aja* 🍽️
+      let total = (nasigoreng * priceList.nasigoreng) +
+                  (nasigorengati * priceList.nasigorengati) +
+                  (mienyemek * priceList.mienyemek) +
+                  (miegoreng * priceList.miegoreng) +
+                  (tehbotol * priceList.tehbotol);
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          let latitude = position.coords.latitude;
+          let longitude = position.coords.longitude;
+          let mapsLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
+
+          let pesan = `🍽️ *Pesanan Baru - Makan Dulu Aja* 🍽️
 Nama: ${userName}
 No HP: ${userHP}
 Alamat: ${alamat}
 
 Pesanan:
-🍔 Burger Spesial: ${burger}
-🍕 Pizza Mini: ${pizza}
-🥤 Es Teh Manis: ${esteh}
+🍚 Nasi Goreng Rumahan: ${nasigoreng}
+🍚 Nasi Goreng Ati Ampla Rumahan: ${nasigorengati}
+🍜 Mie Nyemek Rumahan: ${mienyemek}
+🍜 Mie Goreng Rumahan: ${miegoreng}
+🥤 Teh Botol: ${tehbotol}
+
+💰 Total: Rp ${total.toLocaleString()}
+
+📍 Lokasi: ${mapsLink}
 
 👉 Tolong segera diproses ya 🙏`;
 
-      // Nomor WA admin (ganti dengan nomor kamu)
-      const phoneNumber = "6289507083879"; 
-      const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(pesan)}`;
-      window.open(url, "_blank");
+          const phoneNumber = "6289507083879"; 
+          const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(pesan)}`;
+          window.open(url, "_blank");
+          showToast();
+        }, function() {
+          alert("Lokasi tidak bisa diakses, pesanan terkirim tanpa lokasi.");
+        });
+      } else {
+        alert("Browser tidak mendukung geolokasi.");
+      }
     }
+
+    function showToast() {
+      const toast = document.getElementById("toast");
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 3000);
+    }
+
+    // Slideshow gambar
+    const slides = [
+      "https://i.pinimg.com/736x/3d/e1/73/3de1738c8404b6423d2e3601a16e2bdb.jpg",
+      "https://i.pinimg.com/1200x/e9/96/d9/e996d918702ba48b5ef94724d4b924ab.jpg",
+      "https://i.pinimg.com/1200x/2c/b0/a3/2cb0a380b6cf6bfd06ae740d7134cd34.jpg",
+      "https://i.pinimg.com/736x/cd/bf/69/cdbf69d3d57ea09a441b114e2a188819.jpg",
+      "https://i.pinimg.com/1200x/d8/8e/b3/d88eb35eaa368c8a198c2aee47176709.jpg"
+    ];
+    let idx = 0;
+    setInterval(() => {
+      idx = (idx + 1) % slides.length;
+      document.getElementById("slideImg").src = slides[idx];
+    }, 3000);
   </script>
 </body>
 </html>
